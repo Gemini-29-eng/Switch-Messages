@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messagerie Privée Pro</title>
+    <title>Messagerie Privée Pro - Ultra-Moderne</title>
     <script src="https://unpkg.com/@lucide/icons"></script>
     <style>
         :root {
             --apple-blue: #007aff;
-            --apple-gray: #e5e5ea;
-            --apple-bg: #ffffff;
-            --apple-sidebar: #f5f5f7;
+            --apple-gray: rgba(229, 229, 234, 0.5); /* Semi-transparent pour glass */
+            --apple-bg: #f5f5f7;
+            --apple-sidebar: rgba(245, 245, 247, 0.7); /* Plus transparent pour glass */
             --text-main: #1d1d1f;
             --text-sub: #86868b;
+            --glass-blur: blur(20px);
+            --genmoji-pink: #fa86a4;
         }
 
         * {
@@ -23,7 +25,7 @@
         }
 
         body {
-            background-color: #f5f5f7;
+            background-color: #d1d1d6; /* Fond plus foncé pour mieux voir le glass */
             color: var(--text-main);
             height: 100vh;
             display: flex;
@@ -129,9 +131,11 @@
         .sidebar {
             width: 320px;
             background-color: var(--apple-sidebar);
-            border-right: 1px solid #d2d2d7;
+            border-right: 1px solid rgba(210, 210, 215, 0.5);
+            backdrop-filter: var(--glass-blur); /* Glassmorphism */
             display: flex;
             flex-direction: column;
+            z-index: 10;
         }
 
         .sidebar-header {
@@ -169,7 +173,8 @@
         .search-inner {
             display: flex;
             align-items: center;
-            background: #e3e3e8;
+            background: rgba(227, 227, 232, 0.7); /* Semi-transparent */
+            backdrop-filter: blur(5px);
             padding: 6px 10px;
             border-radius: 8px;
             color: var(--text-sub);
@@ -195,10 +200,12 @@
             padding: 12px 16px;
             cursor: pointer;
             transition: background 0.2s;
+            border-radius: 12px;
+            margin: 0 8px;
         }
 
         .chat-item:hover, .chat-item.active {
-            background-color: #e3e3e8;
+            background-color: rgba(0, 122, 255, 0.1);
         }
 
         .avatar-circle {
@@ -213,6 +220,7 @@
             font-weight: bold;
             font-size: 18px;
             margin-right: 12px;
+            overflow: hidden;
         }
 
         .chat-meta {
@@ -251,17 +259,19 @@
             display: flex;
             flex-direction: column;
             background: var(--apple-bg);
+            border-left: 1px solid rgba(210, 210, 215, 0.5);
         }
 
         .chat-header {
             height: 60px;
-            border-bottom: 1px solid #d2d2d7;
+            border-bottom: 1px solid rgba(210, 210, 215, 0.5);
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 20px;
             background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(10px);
+            backdrop-filter: var(--glass-blur); /* Glassmorphism */
+            z-index: 5;
         }
 
         .chat-header-user {
@@ -275,7 +285,7 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            background-color: #ffffff;
+            background-color: transparent; /* Pour voir le fond à travers */
         }
 
         .message-row {
@@ -298,6 +308,7 @@
             border-radius: 18px;
             font-size: 15px;
             line-height: 1.4;
+            backdrop-filter: blur(5px);
         }
 
         .message-row.me .bubble {
@@ -307,15 +318,16 @@
         }
 
         .message-row.other .bubble {
-            background-color: var(--apple-gray);
+            background-color: var(--apple-gray); /* Semi-transparent */
             color: black;
             border-bottom-left-radius: 4px;
         }
 
         .chat-input-row {
             padding: 15px 20px;
-            background: var(--apple-bg);
-            border-top: 1px solid #d2d2d7;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: var(--glass-blur); /* Glassmorphism */
+            border-top: 1px solid rgba(210, 210, 215, 0.5);
             display: flex;
             align-items: center;
         }
@@ -324,8 +336,8 @@
             flex: 1;
             display: flex;
             align-items: center;
-            background: #f5f5f7;
-            border: 1px solid #d2d2d7;
+            background: rgba(245, 245, 247, 0.7);
+            border: 1px solid rgba(210, 210, 215, 0.5);
             border-radius: 20px;
             padding: 6px 12px;
         }
@@ -371,44 +383,116 @@
             font-size: 20px;
         }
 
-        /* BANDEAU GENMOJI APPLE INTELLIGENCE (IMAGE 3 Style) */
+        /* GENMOJI STUDIO (PERSONNALISATION DE PROFIL) */
         .genmoji-panel {
             display: none;
-            width: 300px;
-            border-left: 1px solid #d2d2d7;
-            background: #fa86a4; /* Couleur rose tirée de ton image 3 */
+            width: 320px;
+            border-left: 1px solid rgba(210, 210, 215, 0.5);
+            background: var(--genmoji-pink); /* Couleur rose tirée de ton image 3 */
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            padding: 40px 20px;
+            padding: 20px;
             color: white;
+            z-index: 15;
+            transition: all 0.3s ease;
         }
 
         .genmoji-panel.active {
             display: flex;
         }
 
+        .genmoji-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
         .genmoji-avatar-view {
-            width: 140px;
-            height: 140px;
+            width: 160px;
+            height: 160px;
             border-radius: 50%;
             background: rgba(255,255,255,0.25);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 70px;
+            font-size: 90px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+
+        .genmoji-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 100%;
+            background: rgba(255,255,255,0.15);
+            padding: 15px;
+            border-radius: 12px;
+            max-height: 250px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .genmoji-option {
+            font-size: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .genmoji-option:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+
+        .genmoji-input-sim {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            border: none;
+            color: white;
+            outline: none;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .genmoji-input-sim::placeholder {
+            color: rgba(255,255,255,0.7);
         }
 
         .btn-dark {
             background: #000000;
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 20px;
+            padding: 14px 24px;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
             width: 100%;
+            font-size: 15px;
+        }
+
+        /* Personnalisation de la scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.1);
+            border-radius: 4px;
         }
     </style>
 </head>
@@ -462,10 +546,11 @@
 
         <div class="main-chat-area">
             <div class="chat-header">
-                <div class="chat-header-user" id="active-chat-title">Aucune discussion sélectionnée</div>
-                <button class="icon-btn" onclick="toggleGenmojiPanel()" title="Ouvrir le Genmoji Studio">
-                    <i data-lucide="sparkles"></i>
-                </button>
+                <div class="chat-header-user" id="active-chat-title">Aucune discussion</div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="icon-btn" id="my-profile-genmoji-btn" onclick="openGenmojiStudio('me')" title="Personnaliser mon Genmoji">👤</button>
+                    <button class="icon-btn" id="collab-genmoji-btn" onclick="openGenmojiStudio('collab')" title="Personnaliser son Genmoji" style="display: none;">👩‍💼</button>
+                </div>
             </div>
             
             <div class="messages-log" id="messages-log-target">
@@ -482,11 +567,22 @@
         </div>
 
         <div class="genmoji-panel" id="genmoji-sidebar">
-            <h3 style="font-weight: 700; font-size: 20px;">Genmoji Studio</h3>
-            <div class="genmoji-avatar-view" id="genmoji-avatar-render">👩‍💻</div>
-            <div style="width: 100%; text-align: center;">
-                <p style="font-size: 13px; margin-bottom: 20px; opacity: 0.9;">Générez un avatar unique via Apple Intelligence</p>
-                <button class="btn-dark" onclick="triggerGenmojiGeneration()">Customize</button>
+            <div class="genmoji-header">
+                <button class="icon-btn" style="color: white;" onclick="closeGenmojiStudio()">
+                    <i data-lucide="x"></i>
+                </button>
+                <h3 style="font-weight: 700; font-size: 18px;" id="genmoji-title">Genmoji Studio</h3>
+                <div style="width: 32px;"></div>
+            </div>
+
+            <div class="genmoji-avatar-view" id="genmoji-avatar-render">👤</div>
+            
+            <div class="genmoji-grid" id="genmoji-options-target">
+                </div>
+
+            <div style="width: 100%;">
+                <input type="text" class="genmoji-input-sim" id="genmoji-sim-input" placeholder="Décrivez votre Genmoji (ex: Renard astronaute)">
+                <button class="btn-dark" onclick="simulateGenmojiAI()">Customize / Générer</button>
             </div>
         </div>
     </div>
@@ -516,23 +612,29 @@
     let state = {
         me: null,
         collab: null,
-        messages: []
+        messages: [],
+        currentEditingTarget: null // 'me' ou 'collab'
     };
 
-    const mockGenmojis = ["⚡", "✨", "🚀", "👩‍💻", "🦊", "👑", "🦄"];
+    // Vaste sélection de Genmojis style Apple Intelligence
+    const genmojiPool = ["👤", "👩‍💼", "✨", "🚀", "👩‍💻", "🦊", "👑", "🦄", "🐶", "🦁", "🎨", "🎭", "🍕", "🦾", "💃", "🧗‍♀️", "🎮", "🎸", "🎧", "🧩", "👽", "🤠"];
 
     window.onload = function() {
         // Initialisation des icônes Lucide
         lucide.createIcons();
         
         // Charger les données existantes si présentes
-        const saved = localStorage.getItem('app_state_secure');
+        const saved = localStorage.getItem('app_state_glass_secure');
         if (saved) {
             state = JSON.parse(saved);
             showScreen('screen-main-app');
+            document.getElementById('my-profile-genmoji-btn').innerText = state.me.avatar;
             renderSidebar();
             renderMessages();
         }
+
+        // Remplir la grille de Genmojis
+        renderGenmojiGrid();
     };
 
     function showScreen(id) {
@@ -550,8 +652,9 @@
             return;
         }
 
-        state.me = { name: name, email: email, avatar: name.charAt(0).toUpperCase() };
-        localStorage.setItem('app_state_secure', JSON.stringify(state));
+        // Par défaut, le Genmoji est l'avatar👤
+        state.me = { name: name, email: email, avatar: "👤" };
+        saveAndRender();
         showScreen('screen-main-app');
     }
 
@@ -573,19 +676,18 @@
             return;
         }
 
-        state.collab = { name: name, email: email, avatar: name.charAt(0).toUpperCase() };
+        // Par défaut, le Genmoji est l'avatar 👩‍💼
+        state.collab = { name: name, email: email, avatar: "👩‍💼" };
         
         // Message initial automatique de bienvenue dans l'historique
         state.messages.push({
             sender: 'collab',
-            text: `Canal privé créé. Bienvenue ${state.me.name} !`,
+            text: `Canal privé créé. Bienvenue ${state.me.name} ! Glassmorphism et Genmoji activés.`,
             time: 'Maintenant'
         });
 
-        localStorage.setItem('app_state_secure', JSON.stringify(state));
+        saveAndRender();
         closeAddContactModal();
-        renderSidebar();
-        renderMessages();
     }
 
     // Affichage des éléments
@@ -609,6 +711,8 @@
             </div>
         `;
         document.getElementById('active-chat-title').innerText = state.collab.name;
+        document.getElementById('collab-genmoji-btn').style.display = 'inline-flex';
+        document.getElementById('collab-genmoji-btn').innerText = state.collab.avatar;
     }
 
     function renderMessages() {
@@ -618,7 +722,10 @@
         state.messages.forEach(m => {
             const row = document.createElement('div');
             row.classList.add('message-row', m.sender === 'me' ? 'me' : 'other');
-            row.innerHTML = `<div class="bubble">${m.text}</div>`;
+            
+            const avatarHtml = m.sender === 'me' ? '' : `<div class="avatar-circle" style="width:24px; height:24px; font-size:12px; margin-right:6px; margin-top:2px;">${state.collab.avatar}</div>`;
+            
+            row.innerHTML = `<div style="display:flex; align-items:flex-start;">${avatarHtml}<div class="bubble">${m.text}</div></div>`;
             log.appendChild(row);
         });
 
@@ -638,33 +745,96 @@
         });
 
         field.value = '';
-        localStorage.setItem('app_state_secure', JSON.stringify(state));
-        renderMessages();
-        renderSidebar();
+        saveAndRender();
     }
 
     function handleKeyPress(e) {
         if(e.key === 'Enter') sendMessage();
     }
 
-    // Panneau Genmoji (Inspiré de ta 4ème image rose)
-    function toggleGenmojiPanel() {
-        const panel = document.getElementById('genmoji-sidebar');
-        panel.classList.toggle('active');
+    // GENMOJI STUDIO (STYLE APPLE INTELLIGENCE)
+    function renderGenmojiGrid() {
+        const target = document.getElementById('genmoji-options-target');
+        target.innerHTML = '';
+        genmojiPool.forEach(g => {
+            const option = document.createElement('div');
+            option.classList.add('genmoji-option');
+            option.innerText = g;
+            option.onclick = () => selectGenmojiFromGrid(g);
+            target.appendChild(option);
+        });
     }
 
-    function triggerGenmojiGeneration() {
-        const random = mockGenmojis[Math.floor(Math.random() * mockGenmojis.length)];
-        document.getElementById('genmoji-avatar-render').innerText = random;
-        
-        if(state.collab) {
-            state.collab.avatar = random;
-            localStorage.setItem('app_state_secure', JSON.stringify(state));
-            
-            // Met à jour instantanément les avatars de l'interface
-            const sideAvatar = document.getElementById('sidebar-avatar-icon');
-            if(sideAvatar) sideAvatar.innerText = random;
+    function openGenmojiStudio(targetType) {
+        state.currentEditingTarget = targetType;
+        const panel = document.getElementById('genmoji-sidebar');
+        const renderView = document.getElementById('genmoji-avatar-render');
+        const title = document.getElementById('genmoji-title');
+        document.getElementById('genmoji-sim-input').value = '';
+
+        if(targetType === 'me') {
+            title.innerText = "Mon Genmoji";
+            renderView.innerText = state.me.avatar;
+        } else {
+            title.innerText = `Genmoji de ${state.collab.name}`;
+            renderView.innerText = state.collab.avatar;
         }
+
+        panel.classList.add('active');
+    }
+
+    function closeGenmojiStudio() {
+        document.getElementById('genmoji-sidebar').classList.remove('active');
+    }
+
+    function selectGenmojiFromGrid(emoji) {
+        const renderView = document.getElementById('genmoji-avatar-render');
+        renderView.innerText = emoji;
+        updateGenmojiValue(emoji);
+    }
+
+    function simulateGenmojiAI() {
+        const input = document.getElementById('genmoji-sim-input').value.trim();
+        const renderView = document.getElementById('genmoji-avatar-render');
+        
+        if(!input) {
+            // Si pas d'entrée, simule une génération aléatoire
+            const random = genmojiPool[Math.floor(Math.random() * genmojiPool.length)];
+            renderView.innerText = random;
+            updateGenmojiValue(random);
+            return;
+        }
+
+        // "Génération" simulée basée sur le texte (très simpliste)
+        renderView.innerHTML = `<span style="font-size:24px; opacity:0.7;">✨ Generating... ✨</span>`;
+        
+        setTimeout(() => {
+            // Simule un choix "pertinent"
+            let generated = "🦊";
+            if(input.toLowerCase().includes("reine") || input.toLowerCase().includes("crown")) generated = "👑";
+            if(input.toLowerCase().includes("espace") || input.toLowerCase().includes("space")) generated = "🚀";
+            if(input.toLowerCase().includes("chien")) generated = "🐶";
+            
+            renderView.innerText = generated;
+            updateGenmojiValue(generated);
+        }, 1500);
+    }
+
+    function updateGenmojiValue(emoji) {
+        if(state.currentEditingTarget === 'me') {
+            state.me.avatar = emoji;
+            document.getElementById('my-profile-genmoji-btn').innerText = emoji;
+        } else {
+            state.collab.avatar = emoji;
+            document.getElementById('collab-genmoji-btn').innerText = emoji;
+        }
+        saveAndRender();
+    }
+
+    function saveAndRender() {
+        localStorage.setItem('app_state_glass_secure', JSON.stringify(state));
+        renderSidebar();
+        renderMessages();
     }
 </script>
 </body>
