@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privé Messagerie</title>
+    <title>Messagerie Privée Pro</title>
+    <script src="https://unpkg.com/@lucide/icons"></script>
     <style>
         :root {
-            --ios-blue: #007aff;
-            --ios-gray: #e5e5ea;
-            --ios-dark-gray: #8e8e93;
-            --ios-bg: #ffffff;
-            --genmoji-pink: #fa86a4;
+            --apple-blue: #007aff;
+            --apple-gray: #e5e5ea;
+            --apple-bg: #ffffff;
+            --apple-sidebar: #f5f5f7;
+            --text-main: #1d1d1f;
+            --text-sub: #86868b;
         }
 
         * {
@@ -21,117 +23,167 @@
         }
 
         body {
-            background-color: #f2f2f7;
+            background-color: #f5f5f7;
+            color: var(--text-main);
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
         }
 
-        /* Conteneur type iPhone */
-        .phone-container {
-            width: 375px;
-            height: 750px;
-            background-color: var(--ios-bg);
-            border-radius: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            overflow: hidden;
+        /* Layout type Application Bureau / Web complète */
+        .app-container {
+            width: 100vw;
+            height: 100vh;
             display: flex;
-            flex-direction: column;
+            background-color: var(--apple-bg);
+            overflow: hidden;
             position: relative;
-            border: 8px solid #1c1c1e;
         }
 
         .screen {
             display: none;
-            flex-direction: column;
             width: 100%;
             height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
         }
 
         .screen.active {
             display: flex;
         }
 
-        /* 1. ÉCRAN ENREGISTREMENT */
-        .setup-screen {
-            padding: 30px 20px;
+        /* ÉCRAN INITIAL : CRÉATION DE TON COMPTE */
+        .onboarding-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             background: #ffffff;
+            padding: 40px;
         }
 
-        .setup-screen h2 {
-            margin-bottom: 20px;
-            font-size: 22px;
-            text-align: center;
-            color: #000;
-        }
-
-        .setup-group {
+        .onboarding-card {
             width: 100%;
-            margin-bottom: 20px;
+            max-width: 400px;
+            text-align: center;
         }
 
-        .setup-group h3 {
-            font-size: 14px;
-            color: var(--ios-dark-gray);
-            margin-bottom: 8px;
+        .onboarding-card h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .onboarding-card p {
+            color: var(--text-sub);
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-sub);
+            margin-bottom: 6px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         input[type="text"], input[type="email"] {
             width: 100%;
-            padding: 12px;
-            background: #f2f2f7;
-            border: none;
+            padding: 12px 16px;
+            background: #f5f5f7;
+            border: 1px solid transparent;
             border-radius: 10px;
-            margin-bottom: 8px;
             font-size: 15px;
             outline: none;
+            transition: all 0.2s;
         }
 
-        .btn {
+        input[type="text"]:focus, input[type="email"]:focus {
+            border-color: var(--apple-blue);
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+        }
+
+        .btn-primary {
             width: 100%;
             padding: 14px;
-            background-color: var(--ios-blue);
+            background-color: var(--apple-blue);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
-        /* 2. EN-TÊTE COMMUN iOS */
-        .ios-header {
-            padding: 20px 15px 10px 15px;
-            border-bottom: 1px solid #e5e5ea;
+        /* INTERFACE PRINCIPALE (SIDEBAR + MAIN CHAT) */
+        .sidebar {
+            width: 320px;
+            background-color: var(--apple-sidebar);
+            border-right: 1px solid #d2d2d7;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #f6f6f6;
+            flex-direction: column;
         }
 
-        .ios-header h1 {
-            font-size: 28px;
+        .sidebar-header {
+            padding: 20px 16px 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-header h1 {
+            font-size: 24px;
             font-weight: 700;
         }
 
-        .header-btn {
-            color: var(--ios-blue);
-            font-size: 16px;
-            cursor: pointer;
+        .icon-btn {
             background: none;
             border: none;
+            color: var(--apple-blue);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* 3. ÉCRAN LISTE DES DISCUSSION (CHATS) */
+        .icon-btn:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+
+        .search-box {
+            padding: 0 16px 15px 16px;
+        }
+
+        .search-inner {
+            display: flex;
+            align-items: center;
+            background: #e3e3e8;
+            padding: 6px 10px;
+            border-radius: 8px;
+            color: var(--text-sub);
+        }
+
+        .search-inner input {
+            background: none;
+            border: none;
+            outline: none;
+            margin-left: 8px;
+            width: 100%;
+            font-size: 14px;
+        }
+
         .chat-list {
             flex: 1;
             overflow-y: auto;
@@ -140,343 +192,480 @@
         .chat-item {
             display: flex;
             align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #f2f2f7;
+            padding: 12px 16px;
             cursor: pointer;
+            transition: background 0.2s;
         }
 
-        .avatar {
-            width: 48px;
-            height: 48px;
+        .chat-item:hover, .chat-item.active {
+            background-color: #e3e3e8;
+        }
+
+        .avatar-circle {
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            background-color: #ddd;
+            background: var(--apple-blue);
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            margin-right: 15px;
+            font-weight: bold;
+            font-size: 18px;
+            margin-right: 12px;
+        }
+
+        .chat-meta {
+            flex: 1;
             overflow: hidden;
         }
 
-        .chat-info {
-            flex: 1;
-        }
-
-        .chat-name-row {
+        .chat-top-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 4px;
+            align-items: center;
+            margin-bottom: 2px;
         }
 
-        .chat-name {
+        .chat-title {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .chat-date {
+            font-size: 12px;
+            color: var(--text-sub);
+        }
+
+        .chat-desc {
+            font-size: 13px;
+            color: var(--text-sub);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* ESPACE DE DISCUSSION PRINCIPAL */
+        .main-chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--apple-bg);
+        }
+
+        .chat-header {
+            height: 60px;
+            border-bottom: 1px solid #d2d2d7;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-header-user {
             font-weight: 600;
             font-size: 16px;
         }
 
-        .chat-time {
-            color: var(--ios-dark-gray);
-            font-size: 14px;
-        }
-
-        .chat-preview {
-            color: var(--ios-dark-gray);
-            font-size: 14px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 250px;
-        }
-
-        /* 4. ÉCRAN CONVERSATION (BULLES) */
-        .messages-container {
+        .messages-log {
             flex: 1;
-            padding: 15px;
+            padding: 20px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            background: #ffffff;
+            background-color: #ffffff;
         }
 
-        .msg-bubble {
-            max-width: 70%;
-            padding: 10px 16px;
-            border-radius: 20px;
-            margin-bottom: 8px;
-            font-size: 16px;
-            line-height: 1.4;
-            word-wrap: break-word;
+        .message-row {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+            max-width: 65%;
         }
 
-        .msg-bubble.me {
-            background-color: var(--ios-blue);
-            color: white;
+        .message-row.me {
             align-self: flex-end;
+        }
+
+        .message-row.other {
+            align-self: flex-start;
+        }
+
+        .bubble {
+            padding: 10px 16px;
+            border-radius: 18px;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        .message-row.me .bubble {
+            background-color: var(--apple-blue);
+            color: white;
             border-bottom-right-radius: 4px;
         }
 
-        .msg-bubble.other {
-            background-color: var(--ios-gray);
+        .message-row.other .bubble {
+            background-color: var(--apple-gray);
             color: black;
-            align-self: flex-start;
             border-bottom-left-radius: 4px;
         }
 
-        .input-bar {
-            padding: 10px 15px;
+        .chat-input-row {
+            padding: 15px 20px;
+            background: var(--apple-bg);
+            border-top: 1px solid #d2d2d7;
             display: flex;
             align-items: center;
-            background: #f6f6f6;
-            border-top: 1px solid #e5e5ea;
         }
 
-        .chat-input {
+        .input-wrapper {
             flex: 1;
-            padding: 8px 15px;
-            border: 1px solid #dddddd;
+            display: flex;
+            align-items: center;
+            background: #f5f5f7;
+            border: 1px solid #d2d2d7;
             border-radius: 20px;
-            outline: none;
-            font-size: 15px;
-            background: #fff;
+            padding: 6px 12px;
         }
 
-        .send-btn {
+        .input-wrapper input {
+            flex: 1;
             background: none;
             border: none;
-            color: var(--ios-blue);
-            font-size: 24px;
-            margin-left: 10px;
-            cursor: pointer;
+            outline: none;
+            font-size: 15px;
+            padding: 4px;
         }
 
-        /* 5. ÉCRAN GENMOJI (STYLE APPLE) */
-        .genmoji-screen {
-            background-color: var(--genmoji-pink);
-            justify-content: space-between;
+        /* MODAL POPUP POUR AJOUTER LA COLLABORATRICE */
+        .modal {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            justify-content: center;
             align-items: center;
+            z-index: 100;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .modal-content h3 {
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        /* BANDEAU GENMOJI APPLE INTELLIGENCE (IMAGE 3 Style) */
+        .genmoji-panel {
+            display: none;
+            width: 300px;
+            border-left: 1px solid #d2d2d7;
+            background: #fa86a4; /* Couleur rose tirée de ton image 3 */
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
             padding: 40px 20px;
             color: white;
         }
 
-        .genmoji-preview {
-            width: 180px;
-            height: 180px;
+        .genmoji-panel.active {
+            display: flex;
+        }
+
+        .genmoji-avatar-view {
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255,255,255,0.25);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 90px;
-            margin-top: 60px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            font-size: 70px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
         }
 
-        .genmoji-title {
-            font-size: 24px;
-            font-weight: 700;
-            text-align: center;
-        }
-
-        .btn-black {
+        .btn-dark {
             background: #000000;
             color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
         }
     </style>
 </head>
 <body>
 
-<div class="phone-container">
+<div class="app-container">
 
-    <div id="screen-setup" class="screen active setup-screen">
-        <h2>Création des Comptes</h2>
+    <div id="screen-onboarding" class="screen active">
+        <div class="onboarding-container">
+            <div class="onboarding-card">
+                <h2>Bienvenue sur votre messagerie</h2>
+                <p>Configurez votre profil pour commencer vos échanges privés.</p>
+                
+                <div class="input-group">
+                    <label>Votre prénom</label>
+                    <input type="text" id="my-name-input" placeholder="Ex: Pommi">
+                </div>
+                <div class="input-group">
+                    <label>Votre adresse e-mail</label>
+                    <input type="email" id="my-email-input" placeholder="nom@exemple.com">
+                </div>
+                
+                <button class="btn-primary" onclick="setupMyAccount()">Créer mon accès</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="screen-main-app" class="screen">
         
-        <div class="setup-group">
-            <h3>Mon Profil (Vous)</h3>
-            <input type="text" id="my-name" placeholder="Votre prénom (ex: Pommi)">
-            <input type="email" id="my-email" placeholder="Votre adresse email">
-        </div>
-
-        <div class="setup-group">
-            <h3>Ma Collaboratrice</h3>
-            <input type="text" id="collab-name" placeholder="Nom de votre collaboratrice">
-            <input type="email" id="collab-email" placeholder="Son adresse email">
-        </div>
-
-        <button class="btn" onclick="initPlatform()">Activer la plateforme</button>
-    </div>
-
-    <div id="screen-list" class="screen">
-        <div class="ios-header">
-            <button class="header-btn" onclick="navigate('screen-genmoji')">Genmoji</button>
-            <h1>Messages</h1>
-            <button class="header-btn" style="font-weight:bold;">✏️</button>
-        </div>
-        <div class="chat-list" id="chat-list-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>Messages</h1>
+                <button class="icon-btn" onclick="openAddContactModal()">
+                    <i data-lucide="square-pen"></i>
+                </button>
             </div>
-    </div>
-
-    <div id="screen-chat" class="screen">
-        <div class="ios-header">
-            <button class="header-btn" onclick="navigate('screen-list')">ㄑ Retour</button>
-            <h1 id="chat-header-name" style="font-size: 18px;">Collaboratrice</h1>
-            <div style="width: 50px;"></div>
-        </div>
-        <div class="messages-container" id="messages-container">
+            
+            <div class="search-box">
+                <div class="search-inner">
+                    <i data-lucide="search" style="width:16px; height:16px;"></i>
+                    <input type="text" placeholder="Rechercher">
+                </div>
             </div>
-        <div class="input-bar">
-            <input type="text" id="message-input" class="chat-input" placeholder="iMessage">
-            <button class="send-btn" onclick="performSendMessage()">▲</button>
+            
+            <div class="chat-list" id="contacts-list-target">
+                <div style="padding: 20px; text-align: center; color: var(--text-sub); font-size: 14px;">
+                    Aucune discussion. Cliquez sur l'icône de rédaction en haut pour ajouter votre collaboratrice.
+                </div>
+            </div>
+        </div>
+
+        <div class="main-chat-area">
+            <div class="chat-header">
+                <div class="chat-header-user" id="active-chat-title">Aucune discussion sélectionnée</div>
+                <button class="icon-btn" onclick="toggleGenmojiPanel()" title="Ouvrir le Genmoji Studio">
+                    <i data-lucide="sparkles"></i>
+                </button>
+            </div>
+            
+            <div class="messages-log" id="messages-log-target">
+                </div>
+            
+            <div class="chat-input-row">
+                <div class="input-wrapper">
+                    <input type="text" id="chat-message-field" placeholder="iMessage" onkeypress="handleKeyPress(event)">
+                    <button class="icon-btn" onclick="sendMessage()" style="color: var(--apple-blue);">
+                        <i data-lucide="arrow-up-circle"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="genmoji-panel" id="genmoji-sidebar">
+            <h3 style="font-weight: 700; font-size: 20px;">Genmoji Studio</h3>
+            <div class="genmoji-avatar-view" id="genmoji-avatar-render">👩‍💻</div>
+            <div style="width: 100%; text-align: center;">
+                <p style="font-size: 13px; margin-bottom: 20px; opacity: 0.9;">Générez un avatar unique via Apple Intelligence</p>
+                <button class="btn-dark" onclick="triggerGenmojiGeneration()">Customize</button>
+            </div>
         </div>
     </div>
 
-    <div id="screen-genmoji" class="screen genmoji-screen">
-        <div class="genmoji-title">Genmoji AI Studio</div>
-        <div class="genmoji-preview" id="genmoji-display">👩‍💻</div>
-        <div style="width: 100%;">
-            <button class="btn btn-black" onclick="generateNewGenmoji()">Générer un Genmoji</button>
-            <button class="btn" style="background: rgba(255,255,255,0.3); margin-top: 10px;" onclick="navigate('screen-list')">Fermer</button>
+    <div class="modal" id="add-contact-modal">
+        <div class="modal-content">
+            <h3>Ajouter votre collaboratrice</h3>
+            <div class="input-group">
+                <label>Son prénom / nom</label>
+                <input type="text" id="collab-name-input" placeholder="Nom de votre collaboratrice">
+            </div>
+            <div class="input-group">
+                <label>Son adresse e-mail</label>
+                <input type="email" id="collab-email-input" placeholder="collaboratrice@exemple.com">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn-primary" style="background: #e5e5ea; color: black; margin:0;" onclick="closeAddContactModal()">Annuler</button>
+                <button class="btn-primary" style="margin:0;" onclick="saveCollaborator()">Ajouter</button>
+            </div>
         </div>
     </div>
 
 </div>
 
 <script>
-    // Variables globales d'état
-    let appData = {
+    // État de l'application
+    let state = {
         me: null,
         collab: null,
         messages: []
     };
 
-    // Emojis disponibles pour simuler la création de Genmoji Apple Intelligence
-    const genmojiPool = ["👩‍💻", "✨", "🚀", "🦊", "🎨", "🦄", "👑", "🍕", "🦾", "💃"];
+    const mockGenmojis = ["⚡", "✨", "🚀", "👩‍💻", "🦊", "👑", "🦄"];
 
-    // Au chargement, on vérifie si la plateforme a déjà été initialisée
     window.onload = function() {
-        const savedData = localStorage.getItem('private_messenger_data');
-        if (savedData) {
-            appData = JSON.parse(savedData);
-            navigate('screen-list');
-            renderChatList();
+        // Initialisation des icônes Lucide
+        lucide.createIcons();
+        
+        // Charger les données existantes si présentes
+        const saved = localStorage.getItem('app_state_secure');
+        if (saved) {
+            state = JSON.parse(saved);
+            showScreen('screen-main-app');
+            renderSidebar();
+            renderMessages();
         }
     };
 
-    function navigate(screenId) {
+    function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(screenId).classList.add('active');
+        document.getElementById(id).classList.add('active');
     }
 
-    // Initialisation
-    function initPlatform() {
-        const myName = document.getElementById('my-name').value.trim();
-        const myEmail = document.getElementById('my-email').value.trim();
-        const collabName = document.getElementById('collab-name').value.trim();
-        const collabEmail = document.getElementById('collab-email').value.trim();
-
-        if (!myName || !myEmail || !collabName || !collabEmail) {
-            alert("S'il te plaît, remplis toutes les cases pour créer vos deux accès.");
+    // Étape 1 : Créer ton compte propre
+    function setupMyAccount() {
+        const name = document.getElementById('my-name-input').value.trim();
+        const email = document.getElementById('my-email-input').value.trim();
+        
+        if(!name || !email) {
+            alert("Remplis tes informations pour créer ton compte.");
             return;
         }
 
-        appData.me = { name: myName, email: myEmail, avatar: "👤" };
-        appData.collab = { name: collabName, email: collabEmail, avatar: "👩‍💼" };
+        state.me = { name: name, email: email, avatar: name.charAt(0).toUpperCase() };
+        localStorage.setItem('app_state_secure', JSON.stringify(state));
+        showScreen('screen-main-app');
+    }
+
+    // Étape 2 : Gestion de la modal d'ajout de la camarade
+    function openAddContactModal() {
+        document.getElementById('add-contact-modal').classList.add('active');
+    }
+
+    function closeAddContactModal() {
+        document.getElementById('add-contact-modal').classList.remove('active');
+    }
+
+    function saveCollaborator() {
+        const name = document.getElementById('collab-name-input').value.trim();
+        const email = document.getElementById('collab-email-input').value.trim();
+
+        if(!name || !email) {
+            alert("Veuillez remplir les informations de votre collaboratrice.");
+            return;
+        }
+
+        state.collab = { name: name, email: email, avatar: name.charAt(0).toUpperCase() };
         
-        // Premier message d'accueil automatique
-        appData.messages = [
-            { sender: 'collab', text: `Bonjour ${myName}, ravi de te rejoindre sur notre messagerie privée !`, time: 'Maintenant' }
-        ];
+        // Message initial automatique de bienvenue dans l'historique
+        state.messages.push({
+            sender: 'collab',
+            text: `Canal privé créé. Bienvenue ${state.me.name} !`,
+            time: 'Maintenant'
+        });
 
-        saveToLocalStorage();
-        renderChatList();
-        navigate('screen-list');
+        localStorage.setItem('app_state_secure', JSON.stringify(state));
+        closeAddContactModal();
+        renderSidebar();
+        renderMessages();
     }
 
-    function saveToLocalStorage() {
-        localStorage.setItem('private_messenger_data', JSON.stringify(appData));
-    }
+    // Affichage des éléments
+    function renderSidebar() {
+        const target = document.getElementById('contacts-list-target');
+        if (!state.collab) return;
 
-    // Afficher la liste de contacts / chats (style image 2)
-    function renderChatList() {
-        const container = document.getElementById('chat-list-container');
-        const lastMsg = appData.messages[appData.messages.length - 1];
-        const previewText = lastMsg ? lastMsg.text : "Aucun message";
-        const previewTime = lastMsg ? lastMsg.time : "";
+        const lastMsg = state.messages[state.messages.length - 1];
+        const preview = lastMsg ? lastMsg.text : "Aucun message";
 
-        container.innerHTML = `
-            <div class="chat-item" onclick="openConversation()">
-                <div class="avatar">${appData.collab.avatar}</div>
-                <div class="chat-info">
-                    <div class="chat-name-row">
-                        <span class="chat-name">${appData.collab.name}</span>
-                        <span class="chat-time">${previewTime}</span>
+        target.innerHTML = `
+            <div class="chat-item active" onclick="selectChat()">
+                <div class="avatar-circle" id="sidebar-avatar-icon">${state.collab.avatar}</div>
+                <div class="chat-meta">
+                    <div class="chat-top-row">
+                        <span class="chat-title">${state.collab.name}</span>
+                        <span class="chat-date">En ligne</span>
                     </div>
-                    <div class="chat-preview">${previewText}</div>
+                    <div class="chat-desc">${preview}</div>
                 </div>
             </div>
         `;
-    }
-
-    // Ouvrir la conversation (style image 0)
-    function openConversation() {
-        document.getElementById('chat-header-name').innerText = appData.collab.name;
-        renderMessages();
-        navigate('screen-chat');
-        
-        // Scroll automatique en bas
-        const container = document.getElementById('messages-container');
-        container.scrollTop = container.scrollHeight;
+        document.getElementById('active-chat-title').innerText = state.collab.name;
     }
 
     function renderMessages() {
-        const container = document.getElementById('messages-container');
-        container.innerHTML = '';
+        const log = document.getElementById('messages-log-target');
+        log.innerHTML = '';
 
-        appData.messages.forEach(msg => {
-            const bubble = document.createElement('div');
-            bubble.classList.add('msg-bubble');
-            if (msg.sender === 'me') {
-                bubble.classList.add('me');
-            } else {
-                bubble.classList.add('other');
-            }
-            bubble.innerText = msg.text;
-            container.appendChild(bubble);
+        state.messages.forEach(m => {
+            const row = document.createElement('div');
+            row.classList.add('message-row', m.sender === 'me' ? 'me' : 'other');
+            row.innerHTML = `<div class="bubble">${m.text}</div>`;
+            log.appendChild(row);
         });
+
+        log.scrollTop = log.scrollHeight;
     }
 
-    // Envoyer un message
-    function performSendMessage() {
-        const input = document.getElementById('message-input');
-        const text = input.value.trim();
-        if (!text) return;
+    // Envoi des messages
+    function sendMessage() {
+        const field = document.getElementById('chat-message-field');
+        const text = field.value.trim();
+        if(!text || !state.collab) return;
 
-        appData.messages.push({
+        state.messages.push({
             sender: 'me',
             text: text,
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            time: 'Maintenant'
         });
 
-        input.value = '';
-        saveToLocalStorage();
+        field.value = '';
+        localStorage.setItem('app_state_secure', JSON.stringify(state));
         renderMessages();
-        renderChatList();
-
-        const container = document.getElementById('messages-container');
-        container.scrollTop = container.scrollHeight;
+        renderSidebar();
     }
 
-    // Simuler le créateur de Genmoji Apple Intelligence (style image 3)
-    function generateNewGenmoji() {
-        const randomIndex = Math.floor(Math.random() * genmojiPool.length);
-        const newGenmoji = genmojiPool[randomIndex];
+    function handleKeyPress(e) {
+        if(e.key === 'Enter') sendMessage();
+    }
+
+    // Panneau Genmoji (Inspiré de ta 4ème image rose)
+    function toggleGenmojiPanel() {
+        const panel = document.getElementById('genmoji-sidebar');
+        panel.classList.toggle('active');
+    }
+
+    function triggerGenmojiGeneration() {
+        const random = mockGenmojis[Math.floor(Math.random() * mockGenmojis.length)];
+        document.getElementById('genmoji-avatar-render').innerText = random;
         
-        // On change l'avatar de l'interlocuteur pour l'exemple
-        appData.collab.avatar = newGenmoji;
-        document.getElementById('genmoji-display').innerText = newGenmoji;
-        
-        saveToLocalStorage();
-        renderChatList();
+        if(state.collab) {
+            state.collab.avatar = random;
+            localStorage.setItem('app_state_secure', JSON.stringify(state));
+            
+            // Met à jour instantanément les avatars de l'interface
+            const sideAvatar = document.getElementById('sidebar-avatar-icon');
+            if(sideAvatar) sideAvatar.innerText = random;
+        }
     }
 </script>
-
 </body>
 </html>
