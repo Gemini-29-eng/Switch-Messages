@@ -3,839 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messagerie Privée Pro - Ultra-Moderne</title>
-    <script src="https://unpkg.com/@lucide/icons"></script>
+    <title>Switch</title>
     <style>
-        :root {
-            --apple-blue: #007aff;
-            --apple-gray: rgba(229, 229, 234, 0.5); /* Semi-transparent pour glass */
-            --apple-bg: #f5f5f7;
-            --apple-sidebar: rgba(245, 245, 247, 0.7); /* Plus transparent pour glass */
-            --text-main: #1d1d1f;
-            --text-sub: #86868b;
-            --glass-blur: blur(20px);
-            --genmoji-pink: #fa86a4;
-        }
-
+        /* Réinitialisation et typographie de base */
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
-        body {
-            background-color: #d1d1d6; /* Fond plus foncé pour mieux voir le glass */
-            color: var(--text-main);
-            height: 100vh;
+        body, html {
+            height: 100%;
+            width: 100%;
+            background-color: #ffffff;
+            overflow: hidden; /* Empêche le défilement causé par les effets de flou en bas */
             display: flex;
             justify-content: center;
+        }
+
+        /* Conteneur principal simulant l'écran */
+        .app-container {
+            position: relative;
+            width: 100%;
+            max-width: 420px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 12% 8% 8% 8%;
+        }
+
+        /* --- Effets de vague bleue floutée en bas --- */
+        .ambient-wave-1 {
+            position: absolute;
+            bottom: -10%;
+            left: -20%;
+            width: 140%;
+            height: 35%;
+            background: radial-gradient(ellipse at bottom, rgba(74, 137, 255, 0.9) 0%, rgba(116, 172, 255, 0.6) 45%, transparent 75%);
+            filter: blur(40px);
+            z-index: 1;
+        }
+
+        .ambient-wave-2 {
+            position: absolute;
+            bottom: 0;
+            left: -10%;
+            width: 120%;
+            height: 20%;
+            background: linear-gradient(to top, #4a86ff 0%, rgba(255, 255, 255, 0) 100%);
+            filter: blur(25px);
+            z-index: 2;
+        }
+
+        /* --- Contenu principal --- */
+        .content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
             align-items: center;
         }
 
-        /* Layout type Application Bureau / Web complète */
-        .app-container {
-            width: 100vw;
-            height: 100vh;
+        /* Logo "Switch" */
+        .logo {
+            color: #2F00FF; /* Bleu vif électrique */
+            font-size: 46px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 60px;
+        }
+
+        /* Titre principal */
+        .headline {
+            font-size: 38px;
+            line-height: 1.05;
+            font-weight: 800;
+            color: #000000;
+            width: 100%;
+            text-align: left;
+            letter-spacing: -1.5px;
+            margin-bottom: 70px;
+        }
+
+        /* --- Icône 3D --- */
+        .icon-container {
             display: flex;
-            background-color: var(--apple-bg);
-            overflow: hidden;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: auto; /* Pousse le bouton vers le bas */
+        }
+
+        .icon-box {
+            width: 160px;
+            height: 160px;
+            border-radius: 40px;
+            /* Dégradé complexe : Pêche -> Bleu clair -> Magenta -> Rose foncé */
+            background: linear-gradient(135deg, #eabc9d 0%, #90aef4 40%, #c46cc8 75%, #d55ba9 100%);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             position: relative;
         }
 
-        .screen {
-            display: none;
-            width: 100%;
-            height: 100%;
+        /* Bulle de discussion centrale */
+        .chat-bubble {
+            width: 100px;
+            height: 72px;
+            border-radius: 50px;
+            /* Effet matière plastique/3D de la bulle */
+            background: radial-gradient(circle at 35% 25%, #ffffff 0%, #fae2eb 40%, #d89bb9 90%);
+            box-shadow: 
+                inset -5px -5px 12px rgba(180, 80, 130, 0.3), /* Ombre interne bas-droite */
+                inset 5px 5px 12px rgba(255, 255, 255, 0.9),  /* Reflet interne haut-gauche */
+                0 15px 25px rgba(90, 20, 50, 0.3);            /* Ombre portée sur le fond */
+            position: relative;
         }
 
-        .screen.active {
-            display: flex;
-        }
-
-        /* ÉCRAN INITIAL : CRÉATION DE TON COMPTE */
-        .onboarding-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: #ffffff;
-            padding: 40px;
-        }
-
-        .onboarding-card {
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .onboarding-card h2 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            letter-spacing: -0.5px;
-        }
-
-        .onboarding-card p {
-            color: var(--text-sub);
-            margin-bottom: 30px;
-            font-size: 15px;
-        }
-
-        .input-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-sub);
-            margin-bottom: 6px;
-            text-transform: uppercase;
-        }
-
-        input[type="text"], input[type="email"] {
-            width: 100%;
-            padding: 12px 16px;
-            background: #f5f5f7;
-            border: 1px solid transparent;
-            border-radius: 10px;
-            font-size: 15px;
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        input[type="text"]:focus, input[type="email"]:focus {
-            border-color: var(--apple-blue);
-            background: #ffffff;
-            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
-        }
-
-        .btn-primary {
-            width: 100%;
-            padding: 14px;
-            background-color: var(--apple-blue);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 15px;
-        }
-
-        /* INTERFACE PRINCIPALE (SIDEBAR + MAIN CHAT) */
-        .sidebar {
-            width: 320px;
-            background-color: var(--apple-sidebar);
-            border-right: 1px solid rgba(210, 210, 215, 0.5);
-            backdrop-filter: var(--glass-blur); /* Glassmorphism */
-            display: flex;
-            flex-direction: column;
-            z-index: 10;
-        }
-
-        .sidebar-header {
-            padding: 20px 16px 10px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .sidebar-header h1 {
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        .icon-btn {
-            background: none;
-            border: none;
-            color: var(--apple-blue);
-            cursor: pointer;
-            padding: 6px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .icon-btn:hover {
-            background-color: rgba(0,0,0,0.05);
-        }
-
-        .search-box {
-            padding: 0 16px 15px 16px;
-        }
-
-        .search-inner {
-            display: flex;
-            align-items: center;
-            background: rgba(227, 227, 232, 0.7); /* Semi-transparent */
-            backdrop-filter: blur(5px);
-            padding: 6px 10px;
-            border-radius: 8px;
-            color: var(--text-sub);
-        }
-
-        .search-inner input {
-            background: none;
-            border: none;
-            outline: none;
-            margin-left: 8px;
-            width: 100%;
-            font-size: 14px;
-        }
-
-        .chat-list {
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .chat-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            cursor: pointer;
-            transition: background 0.2s;
-            border-radius: 12px;
-            margin: 0 8px;
-        }
-
-        .chat-item:hover, .chat-item.active {
-            background-color: rgba(0, 122, 255, 0.1);
-        }
-
-        .avatar-circle {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: var(--apple-blue);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 18px;
-            margin-right: 12px;
-            overflow: hidden;
-        }
-
-        .chat-meta {
-            flex: 1;
-            overflow: hidden;
-        }
-
-        .chat-top-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2px;
-        }
-
-        .chat-title {
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        .chat-date {
-            font-size: 12px;
-            color: var(--text-sub);
-        }
-
-        .chat-desc {
-            font-size: 13px;
-            color: var(--text-sub);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* ESPACE DE DISCUSSION PRINCIPAL */
-        .main-chat-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: var(--apple-bg);
-            border-left: 1px solid rgba(210, 210, 215, 0.5);
-        }
-
-        .chat-header {
-            height: 60px;
-            border-bottom: 1px solid rgba(210, 210, 215, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: var(--glass-blur); /* Glassmorphism */
-            z-index: 5;
-        }
-
-        .chat-header-user {
-            font-weight: 600;
-            font-size: 16px;
-        }
-
-        .messages-log {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            background-color: transparent; /* Pour voir le fond à travers */
-        }
-
-        .message-row {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 10px;
-            max-width: 65%;
-        }
-
-        .message-row.me {
-            align-self: flex-end;
-        }
-
-        .message-row.other {
-            align-self: flex-start;
-        }
-
-        .bubble {
-            padding: 10px 16px;
-            border-radius: 18px;
-            font-size: 15px;
-            line-height: 1.4;
-            backdrop-filter: blur(5px);
-        }
-
-        .message-row.me .bubble {
-            background-color: var(--apple-blue);
-            color: white;
-            border-bottom-right-radius: 4px;
-        }
-
-        .message-row.other .bubble {
-            background-color: var(--apple-gray); /* Semi-transparent */
-            color: black;
-            border-bottom-left-radius: 4px;
-        }
-
-        .chat-input-row {
-            padding: 15px 20px;
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: var(--glass-blur); /* Glassmorphism */
-            border-top: 1px solid rgba(210, 210, 215, 0.5);
-            display: flex;
-            align-items: center;
-        }
-
-        .input-wrapper {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            background: rgba(245, 245, 247, 0.7);
-            border: 1px solid rgba(210, 210, 215, 0.5);
-            border-radius: 20px;
-            padding: 6px 12px;
-        }
-
-        .input-wrapper input {
-            flex: 1;
-            background: none;
-            border: none;
-            outline: none;
-            font-size: 15px;
-            padding: 4px;
-        }
-
-        /* MODAL POPUP POUR AJOUTER LA COLLABORATRICE */
-        .modal {
-            display: none;
+        /* Pointe de la bulle de discussion */
+        .chat-bubble::after {
+            content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.4);
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
+            bottom: -3px;
+            left: 18px;
+            width: 24px;
+            height: 24px;
+            background: #d49bb7;
+            border-bottom-right-radius: 16px;
+            transform: rotate(35deg) skew(-15deg, -10deg);
+            z-index: -1;
+            box-shadow: 5px 5px 10px rgba(90, 20, 50, 0.2);
         }
 
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 16px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }
-
-        .modal-content h3 {
-            margin-bottom: 15px;
-            font-size: 20px;
-        }
-
-        /* GENMOJI STUDIO (PERSONNALISATION DE PROFIL) */
-        .genmoji-panel {
-            display: none;
-            width: 320px;
-            border-left: 1px solid rgba(210, 210, 215, 0.5);
-            background: var(--genmoji-pink); /* Couleur rose tirée de ton image 3 */
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            color: white;
-            z-index: 15;
-            transition: all 0.3s ease;
-        }
-
-        .genmoji-panel.active {
-            display: flex;
-        }
-
-        .genmoji-header {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .genmoji-avatar-view {
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.25);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 90px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            overflow: hidden;
-            backdrop-filter: blur(5px);
-        }
-
-        .genmoji-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            width: 100%;
-            background: rgba(255,255,255,0.15);
-            padding: 15px;
-            border-radius: 12px;
-            max-height: 250px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-        }
-
-        .genmoji-option {
-            font-size: 30px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-            border-radius: 8px;
-            transition: all 0.2s;
-        }
-
-        .genmoji-option:hover {
-            background: rgba(255,255,255,0.3);
-            transform: scale(1.1);
-        }
-
-        .genmoji-input-sim {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 10px;
+        /* --- Bouton "Continuer" --- */
+        .btn-continue {
+            width: 90%;
+            max-width: 300px;
+            background-color: #ffffff;
+            color: #000000;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            padding: 18px 0;
             border: none;
-            color: white;
-            outline: none;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-
-        .genmoji-input-sim::placeholder {
-            color: rgba(255,255,255,0.7);
-        }
-
-        .btn-dark {
-            background: #000000;
-            color: white;
-            border: none;
-            padding: 14px 24px;
-            border-radius: 12px;
-            font-weight: 600;
+            border-radius: 40px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15); /* Ombre douce et large */
             cursor: pointer;
-            width: 100%;
-            font-size: 15px;
+            margin-bottom: 30px;
+            transition: transform 0.1s ease;
         }
 
-        /* Personnalisation de la scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(0,0,0,0.1);
-            border-radius: 4px;
+        .btn-continue:active {
+            transform: scale(0.97);
         }
     </style>
 </head>
 <body>
 
-<div class="app-container">
+    <div class="ambient-wave-1"></div>
+    <div class="ambient-wave-2"></div>
 
-    <div id="screen-onboarding" class="screen active">
-        <div class="onboarding-container">
-            <div class="onboarding-card">
-                <h2>Bienvenue sur votre messagerie</h2>
-                <p>Configurez votre profil pour commencer vos échanges privés.</p>
-                
-                <div class="input-group">
-                    <label>Votre prénom</label>
-                    <input type="text" id="my-name-input" placeholder="Ex: Pommi">
+    <div class="app-container">
+        <div class="content">
+            
+            <div class="logo">Switch</div>
+            
+            <h1 class="headline">Une conversation<br>instantanée et<br>sécurisée.</h1>
+            
+            <div class="icon-container">
+                <div class="icon-box">
+                    <div class="chat-bubble"></div>
                 </div>
-                <div class="input-group">
-                    <label>Votre adresse e-mail</label>
-                    <input type="email" id="my-email-input" placeholder="nom@exemple.com">
-                </div>
-                
-                <button class="btn-primary" onclick="setupMyAccount()">Créer mon accès</button>
             </div>
+
+            <button class="btn-continue">Continuer</button>
+
         </div>
     </div>
 
-    <div id="screen-main-app" class="screen">
-        
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <h1>Messages</h1>
-                <button class="icon-btn" onclick="openAddContactModal()">
-                    <i data-lucide="square-pen"></i>
-                </button>
-            </div>
-            
-            <div class="search-box">
-                <div class="search-inner">
-                    <i data-lucide="search" style="width:16px; height:16px;"></i>
-                    <input type="text" placeholder="Rechercher">
-                </div>
-            </div>
-            
-            <div class="chat-list" id="contacts-list-target">
-                <div style="padding: 20px; text-align: center; color: var(--text-sub); font-size: 14px;">
-                    Aucune discussion. Cliquez sur l'icône de rédaction en haut pour ajouter votre collaboratrice.
-                </div>
-            </div>
-        </div>
-
-        <div class="main-chat-area">
-            <div class="chat-header">
-                <div class="chat-header-user" id="active-chat-title">Aucune discussion</div>
-                <div style="display: flex; gap: 10px;">
-                    <button class="icon-btn" id="my-profile-genmoji-btn" onclick="openGenmojiStudio('me')" title="Personnaliser mon Genmoji">👤</button>
-                    <button class="icon-btn" id="collab-genmoji-btn" onclick="openGenmojiStudio('collab')" title="Personnaliser son Genmoji" style="display: none;">👩‍💼</button>
-                </div>
-            </div>
-            
-            <div class="messages-log" id="messages-log-target">
-                </div>
-            
-            <div class="chat-input-row">
-                <div class="input-wrapper">
-                    <input type="text" id="chat-message-field" placeholder="iMessage" onkeypress="handleKeyPress(event)">
-                    <button class="icon-btn" onclick="sendMessage()" style="color: var(--apple-blue);">
-                        <i data-lucide="arrow-up-circle"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="genmoji-panel" id="genmoji-sidebar">
-            <div class="genmoji-header">
-                <button class="icon-btn" style="color: white;" onclick="closeGenmojiStudio()">
-                    <i data-lucide="x"></i>
-                </button>
-                <h3 style="font-weight: 700; font-size: 18px;" id="genmoji-title">Genmoji Studio</h3>
-                <div style="width: 32px;"></div>
-            </div>
-
-            <div class="genmoji-avatar-view" id="genmoji-avatar-render">👤</div>
-            
-            <div class="genmoji-grid" id="genmoji-options-target">
-                </div>
-
-            <div style="width: 100%;">
-                <input type="text" class="genmoji-input-sim" id="genmoji-sim-input" placeholder="Décrivez votre Genmoji (ex: Renard astronaute)">
-                <button class="btn-dark" onclick="simulateGenmojiAI()">Customize / Générer</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="add-contact-modal">
-        <div class="modal-content">
-            <h3>Ajouter votre collaboratrice</h3>
-            <div class="input-group">
-                <label>Son prénom / nom</label>
-                <input type="text" id="collab-name-input" placeholder="Nom de votre collaboratrice">
-            </div>
-            <div class="input-group">
-                <label>Son adresse e-mail</label>
-                <input type="email" id="collab-email-input" placeholder="collaboratrice@exemple.com">
-            </div>
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button class="btn-primary" style="background: #e5e5ea; color: black; margin:0;" onclick="closeAddContactModal()">Annuler</button>
-                <button class="btn-primary" style="margin:0;" onclick="saveCollaborator()">Ajouter</button>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-<script>
-    // État de l'application
-    let state = {
-        me: null,
-        collab: null,
-        messages: [],
-        currentEditingTarget: null // 'me' ou 'collab'
-    };
-
-    // Vaste sélection de Genmojis style Apple Intelligence
-    const genmojiPool = ["👤", "👩‍💼", "✨", "🚀", "👩‍💻", "🦊", "👑", "🦄", "🐶", "🦁", "🎨", "🎭", "🍕", "🦾", "💃", "🧗‍♀️", "🎮", "🎸", "🎧", "🧩", "👽", "🤠"];
-
-    window.onload = function() {
-        // Initialisation des icônes Lucide
-        lucide.createIcons();
-        
-        // Charger les données existantes si présentes
-        const saved = localStorage.getItem('app_state_glass_secure');
-        if (saved) {
-            state = JSON.parse(saved);
-            showScreen('screen-main-app');
-            document.getElementById('my-profile-genmoji-btn').innerText = state.me.avatar;
-            renderSidebar();
-            renderMessages();
-        }
-
-        // Remplir la grille de Genmojis
-        renderGenmojiGrid();
-    };
-
-    function showScreen(id) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-    }
-
-    // Étape 1 : Créer ton compte propre
-    function setupMyAccount() {
-        const name = document.getElementById('my-name-input').value.trim();
-        const email = document.getElementById('my-email-input').value.trim();
-        
-        if(!name || !email) {
-            alert("Remplis tes informations pour créer ton compte.");
-            return;
-        }
-
-        // Par défaut, le Genmoji est l'avatar👤
-        state.me = { name: name, email: email, avatar: "👤" };
-        saveAndRender();
-        showScreen('screen-main-app');
-    }
-
-    // Étape 2 : Gestion de la modal d'ajout de la camarade
-    function openAddContactModal() {
-        document.getElementById('add-contact-modal').classList.add('active');
-    }
-
-    function closeAddContactModal() {
-        document.getElementById('add-contact-modal').classList.remove('active');
-    }
-
-    function saveCollaborator() {
-        const name = document.getElementById('collab-name-input').value.trim();
-        const email = document.getElementById('collab-email-input').value.trim();
-
-        if(!name || !email) {
-            alert("Veuillez remplir les informations de votre collaboratrice.");
-            return;
-        }
-
-        // Par défaut, le Genmoji est l'avatar 👩‍💼
-        state.collab = { name: name, email: email, avatar: "👩‍💼" };
-        
-        // Message initial automatique de bienvenue dans l'historique
-        state.messages.push({
-            sender: 'collab',
-            text: `Canal privé créé. Bienvenue ${state.me.name} ! Glassmorphism et Genmoji activés.`,
-            time: 'Maintenant'
-        });
-
-        saveAndRender();
-        closeAddContactModal();
-    }
-
-    // Affichage des éléments
-    function renderSidebar() {
-        const target = document.getElementById('contacts-list-target');
-        if (!state.collab) return;
-
-        const lastMsg = state.messages[state.messages.length - 1];
-        const preview = lastMsg ? lastMsg.text : "Aucun message";
-
-        target.innerHTML = `
-            <div class="chat-item active" onclick="selectChat()">
-                <div class="avatar-circle" id="sidebar-avatar-icon">${state.collab.avatar}</div>
-                <div class="chat-meta">
-                    <div class="chat-top-row">
-                        <span class="chat-title">${state.collab.name}</span>
-                        <span class="chat-date">En ligne</span>
-                    </div>
-                    <div class="chat-desc">${preview}</div>
-                </div>
-            </div>
-        `;
-        document.getElementById('active-chat-title').innerText = state.collab.name;
-        document.getElementById('collab-genmoji-btn').style.display = 'inline-flex';
-        document.getElementById('collab-genmoji-btn').innerText = state.collab.avatar;
-    }
-
-    function renderMessages() {
-        const log = document.getElementById('messages-log-target');
-        log.innerHTML = '';
-
-        state.messages.forEach(m => {
-            const row = document.createElement('div');
-            row.classList.add('message-row', m.sender === 'me' ? 'me' : 'other');
-            
-            const avatarHtml = m.sender === 'me' ? '' : `<div class="avatar-circle" style="width:24px; height:24px; font-size:12px; margin-right:6px; margin-top:2px;">${state.collab.avatar}</div>`;
-            
-            row.innerHTML = `<div style="display:flex; align-items:flex-start;">${avatarHtml}<div class="bubble">${m.text}</div></div>`;
-            log.appendChild(row);
-        });
-
-        log.scrollTop = log.scrollHeight;
-    }
-
-    // Envoi des messages
-    function sendMessage() {
-        const field = document.getElementById('chat-message-field');
-        const text = field.value.trim();
-        if(!text || !state.collab) return;
-
-        state.messages.push({
-            sender: 'me',
-            text: text,
-            time: 'Maintenant'
-        });
-
-        field.value = '';
-        saveAndRender();
-    }
-
-    function handleKeyPress(e) {
-        if(e.key === 'Enter') sendMessage();
-    }
-
-    // GENMOJI STUDIO (STYLE APPLE INTELLIGENCE)
-    function renderGenmojiGrid() {
-        const target = document.getElementById('genmoji-options-target');
-        target.innerHTML = '';
-        genmojiPool.forEach(g => {
-            const option = document.createElement('div');
-            option.classList.add('genmoji-option');
-            option.innerText = g;
-            option.onclick = () => selectGenmojiFromGrid(g);
-            target.appendChild(option);
-        });
-    }
-
-    function openGenmojiStudio(targetType) {
-        state.currentEditingTarget = targetType;
-        const panel = document.getElementById('genmoji-sidebar');
-        const renderView = document.getElementById('genmoji-avatar-render');
-        const title = document.getElementById('genmoji-title');
-        document.getElementById('genmoji-sim-input').value = '';
-
-        if(targetType === 'me') {
-            title.innerText = "Mon Genmoji";
-            renderView.innerText = state.me.avatar;
-        } else {
-            title.innerText = `Genmoji de ${state.collab.name}`;
-            renderView.innerText = state.collab.avatar;
-        }
-
-        panel.classList.add('active');
-    }
-
-    function closeGenmojiStudio() {
-        document.getElementById('genmoji-sidebar').classList.remove('active');
-    }
-
-    function selectGenmojiFromGrid(emoji) {
-        const renderView = document.getElementById('genmoji-avatar-render');
-        renderView.innerText = emoji;
-        updateGenmojiValue(emoji);
-    }
-
-    function simulateGenmojiAI() {
-        const input = document.getElementById('genmoji-sim-input').value.trim();
-        const renderView = document.getElementById('genmoji-avatar-render');
-        
-        if(!input) {
-            // Si pas d'entrée, simule une génération aléatoire
-            const random = genmojiPool[Math.floor(Math.random() * genmojiPool.length)];
-            renderView.innerText = random;
-            updateGenmojiValue(random);
-            return;
-        }
-
-        // "Génération" simulée basée sur le texte (très simpliste)
-        renderView.innerHTML = `<span style="font-size:24px; opacity:0.7;">✨ Generating... ✨</span>`;
-        
-        setTimeout(() => {
-            // Simule un choix "pertinent"
-            let generated = "🦊";
-            if(input.toLowerCase().includes("reine") || input.toLowerCase().includes("crown")) generated = "👑";
-            if(input.toLowerCase().includes("espace") || input.toLowerCase().includes("space")) generated = "🚀";
-            if(input.toLowerCase().includes("chien")) generated = "🐶";
-            
-            renderView.innerText = generated;
-            updateGenmojiValue(generated);
-        }, 1500);
-    }
-
-    function updateGenmojiValue(emoji) {
-        if(state.currentEditingTarget === 'me') {
-            state.me.avatar = emoji;
-            document.getElementById('my-profile-genmoji-btn').innerText = emoji;
-        } else {
-            state.collab.avatar = emoji;
-            document.getElementById('collab-genmoji-btn').innerText = emoji;
-        }
-        saveAndRender();
-    }
-
-    function saveAndRender() {
-        localStorage.setItem('app_state_glass_secure', JSON.stringify(state));
-        renderSidebar();
-        renderMessages();
-    }
-</script>
 </body>
 </html>
