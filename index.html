@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Switch</title>
+    <title>Switch - Desktop</title>
     <style>
-        /* Réinitialisation et typographie de base */
+        /* Réinitialisation et typographie */
         * {
             margin: 0;
             padding: 0;
@@ -17,146 +17,169 @@
             height: 100%;
             width: 100%;
             background-color: #ffffff;
-            overflow: hidden; /* Empêche le défilement causé par les effets de flou en bas */
+            overflow: hidden;
             display: flex;
             justify-content: center;
+            align-items: center;
         }
 
-        /* Conteneur principal simulant l'écran */
-        .app-container {
-            position: relative;
-            width: 100%;
-            max-width: 420px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            padding: 12% 8% 8% 8%;
-        }
-
-        /* --- Effets de vague bleue floutée en bas --- */
+        /* --- Effets de vague bleue floutée (adaptés pour écran large) --- */
         .ambient-wave-1 {
             position: absolute;
-            bottom: -10%;
-            left: -20%;
-            width: 140%;
-            height: 35%;
-            background: radial-gradient(ellipse at bottom, rgba(74, 137, 255, 0.9) 0%, rgba(116, 172, 255, 0.6) 45%, transparent 75%);
-            filter: blur(40px);
+            bottom: -20%;
+            left: -10%;
+            width: 120%;
+            height: 50%;
+            background: radial-gradient(ellipse at bottom, rgba(74, 137, 255, 0.6) 0%, rgba(116, 172, 255, 0.3) 50%, transparent 70%);
+            filter: blur(60px);
             z-index: 1;
         }
 
         .ambient-wave-2 {
             position: absolute;
             bottom: 0;
-            left: -10%;
-            width: 120%;
-            height: 20%;
-            background: linear-gradient(to top, #4a86ff 0%, rgba(255, 255, 255, 0) 100%);
-            filter: blur(25px);
+            right: 0;
+            width: 80%;
+            height: 30%;
+            background: linear-gradient(to top left, rgba(74, 134, 255, 0.8) 0%, rgba(255, 255, 255, 0) 100%);
+            filter: blur(40px);
             z-index: 2;
         }
 
-        /* --- Contenu principal --- */
-        .content {
+        /* --- Conteneur principal (Layout Desktop) --- */
+        .app-container {
             position: relative;
             z-index: 10;
+            width: 90%;
+            max-width: 1200px;
             display: flex;
-            flex-direction: column;
-            height: 100%;
+            flex-direction: row;
+            justify-content: space-between;
             align-items: center;
+            padding: 0 40px;
         }
 
-        /* Logo "Switch" */
+        /* --- Colonne de gauche : Texte --- */
+        .text-section {
+            flex: 1;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
         .logo {
-            color: #2F00FF; /* Bleu vif électrique */
-            font-size: 46px;
+            color: #2F00FF;
+            font-size: 52px;
             font-weight: 800;
-            letter-spacing: -1.5px;
+            letter-spacing: -2px;
             margin-bottom: 60px;
         }
 
-        /* Titre principal */
         .headline {
-            font-size: 38px;
+            font-size: 64px; /* Texte beaucoup plus grand pour PC */
             line-height: 1.05;
             font-weight: 800;
             color: #000000;
-            width: 100%;
-            text-align: left;
-            letter-spacing: -1.5px;
-            margin-bottom: 70px;
+            letter-spacing: -2px;
+            margin-bottom: 60px;
         }
 
-        /* --- Icône 3D --- */
-        .icon-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: auto; /* Pousse le bouton vers le bas */
-        }
-
-        .icon-box {
-            width: 160px;
-            height: 160px;
-            border-radius: 40px;
-            /* Dégradé complexe : Pêche -> Bleu clair -> Magenta -> Rose foncé */
-            background: linear-gradient(135deg, #eabc9d 0%, #90aef4 40%, #c46cc8 75%, #d55ba9 100%);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-
-        /* Bulle de discussion centrale */
-        .chat-bubble {
-            width: 100px;
-            height: 72px;
-            border-radius: 50px;
-            /* Effet matière plastique/3D de la bulle */
-            background: radial-gradient(circle at 35% 25%, #ffffff 0%, #fae2eb 40%, #d89bb9 90%);
-            box-shadow: 
-                inset -5px -5px 12px rgba(180, 80, 130, 0.3), /* Ombre interne bas-droite */
-                inset 5px 5px 12px rgba(255, 255, 255, 0.9),  /* Reflet interne haut-gauche */
-                0 15px 25px rgba(90, 20, 50, 0.3);            /* Ombre portée sur le fond */
-            position: relative;
-        }
-
-        /* Pointe de la bulle de discussion */
-        .chat-bubble::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 18px;
-            width: 24px;
-            height: 24px;
-            background: #d49bb7;
-            border-bottom-right-radius: 16px;
-            transform: rotate(35deg) skew(-15deg, -10deg);
-            z-index: -1;
-            box-shadow: 5px 5px 10px rgba(90, 20, 50, 0.2);
-        }
-
-        /* --- Bouton "Continuer" --- */
         .btn-continue {
-            width: 90%;
-            max-width: 300px;
             background-color: #ffffff;
             color: #000000;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 800;
             letter-spacing: -0.5px;
-            padding: 18px 0;
+            padding: 20px 60px;
             border: none;
             border-radius: 40px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15); /* Ombre douce et large */
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
             cursor: pointer;
-            margin-bottom: 30px;
-            transition: transform 0.1s ease;
+            transition: all 0.2s ease;
+        }
+
+        /* Effet de survol spécifique à la souris */
+        .btn-continue:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
         }
 
         .btn-continue:active {
-            transform: scale(0.97);
+            transform: translateY(1px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- Colonne de droite : Visuel 3D --- */
+        .visual-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Icône agrandie */
+        .icon-box {
+            width: 320px;
+            height: 320px;
+            border-radius: 75px;
+            background: linear-gradient(135deg, #eabc9d 0%, #90aef4 40%, #c46cc8 75%, #d55ba9 100%);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            /* Légère animation de flottement pour habiller l'écran */
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Bulle de discussion redimensionnée */
+        .chat-bubble {
+            width: 180px;
+            height: 130px;
+            border-radius: 80px;
+            background: radial-gradient(circle at 35% 25%, #ffffff 0%, #fae2eb 40%, #d89bb9 90%);
+            box-shadow: 
+                inset -8px -8px 20px rgba(180, 80, 130, 0.3),
+                inset 8px 8px 20px rgba(255, 255, 255, 0.9),
+                0 25px 40px rgba(90, 20, 50, 0.3);
+            position: relative;
+        }
+
+        /* Pointe de la bulle */
+        .chat-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 30px;
+            width: 45px;
+            height: 45px;
+            background: #d49bb7;
+            border-bottom-right-radius: 25px;
+            transform: rotate(35deg) skew(-15deg, -10deg);
+            z-index: -1;
+            box-shadow: 8px 8px 15px rgba(90, 20, 50, 0.2);
+        }
+
+        /* Adaptation pour les écrans moyens (tablettes/petits laptops) */
+        @media (max-width: 900px) {
+            .app-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .text-section {
+                align-items: center;
+                margin-bottom: 60px;
+            }
+            .headline { font-size: 48px; }
+            .icon-box { width: 240px; height: 240px; }
+            .chat-bubble { width: 140px; height: 100px; }
         }
     </style>
 </head>
@@ -166,20 +189,16 @@
     <div class="ambient-wave-2"></div>
 
     <div class="app-container">
-        <div class="content">
-            
+        <div class="text-section">
             <div class="logo">Switch</div>
-            
             <h1 class="headline">Une conversation<br>instantanée et<br>sécurisée.</h1>
-            
-            <div class="icon-container">
-                <div class="icon-box">
-                    <div class="chat-bubble"></div>
-                </div>
-            </div>
-
             <button class="btn-continue">Continuer</button>
+        </div>
 
+        <div class="visual-section">
+            <div class="icon-box">
+                <div class="chat-bubble"></div>
+            </div>
         </div>
     </div>
 
